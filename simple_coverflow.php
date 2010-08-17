@@ -1,12 +1,11 @@
 <?php
     /**
-    * Plugin Name: Simple_coverflow
+    * Plugin Name: Simple coverflow
     * Version: 0.0
     * Author: Simon Hansen
     * Author URI: http://simonhans.dk
     *
-    * simple_coverflow
-    *
+    * 
     *
     * Developers can learn more about the WordPress shortcode API:
     * @link http://codex.wordpress.org/Shortcode_API
@@ -15,7 +14,7 @@
     * @link http://jquery.com/demo/thickbox
     *
     * @copyright 2010- 2010
-    * @version 0.0
+    * @version 0.8
     * @author Simon Hansen
     * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     *
@@ -23,7 +22,7 @@
     * but WITHOUT ANY WARRANTY; without even the implied warranty of
     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     *
-    * @package simple_coverflow
+    * @package simple-coverflow
     * 
     * 
     */

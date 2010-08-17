@@ -22,8 +22,8 @@
 
             wp_enqueue_script('jquery');
             //wp_enqueue_script('j', WP_CONTENT_URL . '/plugins/sims/jquery.js',array('jquery'));
-            wp_enqueue_script('simple_coverflow_js', WP_CONTENT_URL . '/plugins/simple_coverflow/javascript.js', array('jquery'));
-            wp_enqueue_style('simple_coverflow_style', WP_CONTENT_URL . '/plugins/simple_coverflow/style.css');
+            wp_enqueue_script('simple_coverflow_js', WP_CONTENT_URL . '/plugins/simple-coverflow/javascript.js', array('jquery'));
+            wp_enqueue_style('simple_coverflow_style', WP_CONTENT_URL . '/plugins/simple-coverflow/style.css');
 
             wp_enqueue_script( 'thickbox' );
         }

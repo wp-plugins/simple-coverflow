@@ -86,27 +86,3 @@ cursor: hand;
     margin-left: 0;
     }
 
-/* Image sizes depending on the number of columns */
-
-
-.col-0 { width: 100%; }
-.col-1 { width: 100%; }
-.col-2 { width: 50%; }
-.col-3 { width: 33%; }
-.col-4 { width: 25%; }
-.col-5 { width: 20%; }
-.col-6 { width: 16.5%; }
-.col-7 { width: 14%; }
-.col-8 { width: 12.4%; }
-.col-9 { width: 11%; }
-.col-10 { width: 10%; }
-.col-11 { width: 9%; }
-.col-12 { width: 8.33%; }
-.col-13 { width: 7.6%; }
-.col-14 { width: 7.1%; }
-.col-15 { width: 6.66%; }
-.col-16 { width: 6.25%; }
-.col-17 { width: 5.83%; }
-.col-18 { width: 5.55%; }
-.col-19 { width: 5.25%; }
-.col-20 { width:auto;}
