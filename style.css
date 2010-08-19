@@ -1,0 +1,88 @@
+/**
+ * Cleaner Gallery Stylesheet
+ * Default style rules for the Cleaner Gallery plugin for WordPress.
+ *
+ * @copyright 2008 - 2010
+ * @version 0.6
+ * @author Justin Tadlock
+ * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * @package CleanerGallery
+ */
+
+.gallery {
+    display: block;
+    clear: both;
+    overflow: hidden;
+    margin: 0 auto;
+    }
+.gallery .gallery-row {
+    display: block;
+    clear: both;
+    overflow: hidden;
+    margin: 0;
+    }
+.gallery .gallery-item {
+    overflow: hidden;
+    float: left;
+    margin: 0;
+    text-align: center;
+    list-style: none;
+    padding: 0;
+    }
+.gallery .gallery-item img, .gallery .gallery-item img.thumbnail {
+    max-width: 89%;
+    height: auto;
+    padding: 0;
+    margin: 0 auto;
+    
+    }
+    
+#content .sims .simscoverflow  img {
+border:0px solid #000000;
+}
+
+ #left{
+
+background-image: url('pil_right.png');
+height:40px;
+width:37px;
+display:block;
+float:right;
+cursor: hand; 
+
+}
+#right {
+background-image: url('pil_left.png');
+height:40px;
+width:37px;
+display:block;
+float:left;
+cursor: hand;
+}
+
+
+    
+    
+#content .gallery .gallery-item{
+
+    width: 160px;
+    float:left;
+    
+    
+}
+
+.gallery-row{
+    position:relative;
+   width:21800px; 
+}
+
+.gallery-caption {
+    margin-left: 0;
+    }
+
