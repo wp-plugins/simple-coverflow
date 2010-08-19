@@ -4,7 +4,7 @@ Donate link:   none
 Tags: gallery, lightbox, images, jquery,thickbox
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.8
+Stable tag: 0.9
 
 == Description ==
 A very simple coverflow plugin. For php programmers easy to modiffy
@@ -30,13 +30,25 @@ insert shortag [coverflow] in your post and the plugin wil use your gallery imag
 == Frequently Asked Questions ==
 How to use:
 insert shortag [coverflow] in your post and the plugin wil use your gallery images in a coverflow
+
+Many themes does not have the var $content_width set in the themes function file. Find the width of the content block and insert it like this
+
+if ( ! isset( $content_width ) )
+    $content_width = 548;
  
 ==Changelog ==
 = Version 0.8 =    
 *inital release
+
+= Version 0.9 =
+*Script now takes the content width from the theme    
+*Changed css to more unik names
+*Put controller in class
+*Can now be used in post, because of unike ids
  
 ==Upgrade Notice ==
 To upgrade from a previous version of this plugin, delete the entire folder and files from the previous version of the plugin and then follow the installation instructions below.
+
  
 == Screenshots ==
 1. The plugin at work.   

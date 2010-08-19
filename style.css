@@ -1,33 +1,33 @@
 /**
- * Cleaner Gallery Stylesheet
- * Default style rules for the Cleaner Gallery plugin for WordPress.
+ * Cleaner simple_coverflow Stylesheet
+ * Default style rules for the Cleaner simple_coverflow plugin for WordPress.
  *
  * @copyright 2008 - 2010
  * @version 0.6
  * @author Justin Tadlock
- * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
+ * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-simple_coverflow-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package CleanerGallery
+ * @package Cleanersimple_coverflow
  */
 
-.gallery {
+.simple_coverflow {
     display: block;
     clear: both;
     overflow: hidden;
     margin: 0 auto;
     }
-.gallery .gallery-row {
+.simple_coverflow .simple_coverflow-row {
     display: block;
     clear: both;
     overflow: hidden;
     margin: 0;
     }
-.gallery .gallery-item {
+.simple_coverflow .simple_coverflow-item {
     overflow: hidden;
     float: left;
     margin: 0;
@@ -35,7 +35,7 @@
     list-style: none;
     padding: 0;
     }
-.gallery .gallery-item img, .gallery .gallery-item img.thumbnail {
+.simple_coverflow .simple_coverflow-item img, .simple_coverflow .simple_coverflow-item img.thumbnail {
     max-width: 89%;
     height: auto;
     padding: 0;
@@ -43,11 +43,11 @@
     
     }
     
-#content .sims .simscoverflow  img {
+#content  .simscoverflow  img {
 border:0px solid #000000;
 }
 
- #left{
+ .left{
 
 background-image: url('pil_right.png');
 height:40px;
@@ -57,7 +57,7 @@ float:right;
 cursor: hand; 
 
 }
-#right {
+.right {
 background-image: url('pil_left.png');
 height:40px;
 width:37px;
@@ -69,20 +69,21 @@ cursor: hand;
 
     
     
-#content .gallery .gallery-item{
+/*#content .simple_coverflow .simple_coverflow-item{
 
     width: 160px;
     float:left;
     
     
-}
+} */
 
-.gallery-row{
+.simple_coverflow-row{
     position:relative;
    width:21800px; 
 }
 
-.gallery-caption {
+.simple_coverflow-caption {
     margin-left: 0;
     }
+
 
