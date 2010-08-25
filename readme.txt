@@ -58,6 +58,9 @@ if ( ! isset( $content_width ) )
 = Version 0.9.1 = 
 Minor bug in javascript fixed
 
+= Version 0.9.2 = 
+Fixed javascript bug when used in Internet explorer
+
  
 ==Upgrade Notice ==
 To upgrade from a previous version of this plugin, delete the entire folder and files from the previous version of the plugin and then follow the installation instructions below.

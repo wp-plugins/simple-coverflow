@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 0.9.1
+    * Version: 0.9.2
     * Author: Simon Hansen
     * Author URI: http://simonhans.dk
     *
@@ -14,7 +14,7 @@
     * @link http://jquery.com/demo/thickbox
     *
     * @copyright 2010- 2010
-    * @version 0.9.1
+    * @version 0.9.2
     * @author Simon Hansen
     * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     *
