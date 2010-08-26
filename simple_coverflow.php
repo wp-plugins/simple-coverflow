@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 0.9.2
+    * Version: 0.9.3
     * Author: Simon Hansen
     * Author URI: http://simonhans.dk
     *
@@ -57,7 +57,6 @@
         }
 
 
-
         function coverflow_handler($attr){
 
             return $this->obj->cowerflow($attr); 
@@ -65,21 +64,29 @@
         }
 
         function setContentWidth($content_width){
-            
+
             $this->content_width=$content_width;   
         }
 
-        
+
         /**
         * register the thumbnal size. Used to resize when upload and if image does not exist
         * 
         */
         function simple_coverflow_img_size() {
             global $content_width; //get width from theme
+            $w=simple_coverflow_get_setting('coverflow_width' );
+            if($w){   //if content width is set in backend
+                $content_width=$w;
+            }
+
             $this->setContentWidth($content_width);
+
             $width=$this->content_width/4;
             $height=$this->content_width/4;
+
             add_image_size('simple_coverflow_thumb',$width,$height, true);
+           // add_image_size('large',400,600,false);
 
         }
 
@@ -94,25 +101,37 @@
 
             /* Set constant path to the  simple_coverflow plugin directory. */
 
-
             define( 'SIMPLE_COVERFLOW_DIR', plugin_dir_path( __FILE__ ) );
 
             /* Set constant path to the Cleaner Gallery plugin URL. */
             define( 'SIMPLE_COVERFLOW_URL', plugin_dir_url( __FILE__ ) );
 
-            /*if(is_super_admin($user_id)){
-            echo 222;
-            }*/
-
             if(!is_admin()){ //only include for frontend
 
                 require_once (dirname (__FILE__) . '/simple_coverflow_func.php');
+            }else      {
+                require_once( SIMPLE_COVERFLOW_DIR . 'admin.php' );
             }
 
 
             do_action( 'simple_coverflow_loaded' );
         }
     }
+
+
+
+    function simple_coverflow_get_setting( $option = '' ) {
+        global $simple_coverflow;
+
+        if ( !$option )
+            return false;
+
+        if ( !isset( $simple_coverflow->settings ) )
+            $simple_coverflow->settings = get_option( 'simple_coverflow_settings' );
+
+        return $simple_coverflow->settings[$option];
+    }
+
 
 
     $r=new simple_coverflow_controller();

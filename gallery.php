@@ -12,6 +12,34 @@
     class simple_coverflow{
 
 
+        function simple_coverflow_default_settings( $id) {
+
+
+            /* Default gallery settings. */
+            $defaults = array(
+            'order' => 'ASC',
+            'orderby' => 'menu_order ID',
+            'id' =>  $id,
+            'link' => 'large',
+            'itemtag' => 'dl',
+            'icontag' => 'dt',
+            'captiontag' => 'dd',
+            'columns' => 3,
+            'size' => 'thumbnail',
+            'include' => '',
+            'exclude' => '',
+            'numberposts' => -1,
+            'offset' => ''
+            );
+           
+            $defaults['order'] = ( ( simple_coverflow_get_setting( 'order' ) ) ? simple_coverflow_get_setting( 'order' ) : 'ASC' );
+            $defaults['orderby'] = ( ( simple_coverflow_get_setting( 'orderby' ) ) ? simple_coverflow_get_setting( 'orderby' ) : 'menu_order ID' );
+            $defaults['size'] = ( ( simple_coverflow_get_setting( 'size' ) ) ? simple_coverflow_get_setting( 'size' ) : 'thumbnail' );
+            $defaults['link'] = ( ( simple_coverflow_get_setting( 'image_link' ) ) ? simple_coverflow_get_setting( 'image_link' ) : '' );
+
+            return $defaults;
+        }
+
 
         function javascript_and_css(){   
 
@@ -20,13 +48,9 @@
             if (! isset( $content_width ) ){
                 //$content_width = 640;
             }
-            
-            
+
             global $some_id;
-            
 
-
-            
             echo '<style type="text/css">  
 
             .simple_coverflow{
@@ -40,8 +64,6 @@
             </style>
             ';
 
-
-
             echo '<script type="text/javascript">
             //<![CDATA[
             var simple_cover_content_width=  \''.$content_width.'\';                            
@@ -53,6 +75,16 @@
             return ;
 
         }
+
+
+        function resizedImage($rg){
+
+            $tt=explode('.',$rg['0']);
+            // print_r($tt);
+            return implode('-'.$rg['1'].'x'.$rg['2'].'.',$tt);
+
+        }
+
         /**
         * Load the Thickbox JavaScript if needed.
         *
@@ -86,11 +118,11 @@
 
 
         function cowerflow($attr) {
-            
+
             global $unike_id;
             $unike_id++; // set unike id for use in post
-          //  echo $unike_id;
-            
+            //  echo $unike_id;
+
 
             global $post;
 
@@ -101,23 +133,9 @@
                     unset( $attr['orderby'] );
             }
 
-            /* Default gallery settings. */
-            $defaults = array(
-            'order' => 'ASC',
-            'orderby' => 'menu_order ID',
-            'id' => $post->ID,
-            'link' => 'full',
-            'itemtag' => 'dl',
-            'icontag' => 'dt',
-            'captiontag' => 'dd',
-            'columns' => 3,
-            'size' => 'thumbnail',
-            'include' => '',
-            'exclude' => '',
-            'numberposts' => -1,
-            'offset' => ''
-            );
 
+
+            $defaults=$this->simple_coverflow_default_settings($post->ID);
 
             /* Merge the defaults with user input. Make sure $id is an integer. */
             extract( shortcode_atts( $defaults, $attr ) );
@@ -144,9 +162,7 @@
             'post_parent' => $id,
             'post_status' => 'inherit',
             'post_type' => 'attachment',
-            //'post_mime_type' => 'image',
-            //'post_mime_type' => 'audio',
-            'post_mime_type' => '',
+            'post_mime_type' => 'image',
             'order' => $order,
             'orderby' => $orderby,
             'exclude' => $exclude,
@@ -169,7 +185,7 @@
             if ( is_feed() ) {
                 $output = "\n";
                 foreach ( $attachments as $id => $attachment )
-                    $output .= wp_get_attachment_link( $id, $size, true ) . "\n";
+                    $output .= wp_get_attachment_link( $id, $size, true ) . "\n";                      
                 return $output;
             }
 
@@ -182,16 +198,30 @@
             $i = 0;
 
 
-
             /* Class and rel attributes. */
             $attributes ='class="thickbox" rel="clean-gallery-'.$gallery_id.'"';
 
-
+            $this->generateResize($attachments);
+            
             $output=$this->render($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes);
+
             return $output;
 
         }
 
+
+        function generateResize($attachments){
+
+            if($_GET['gen']==''){ //only generate if gen is set
+
+                foreach ( $attachments as $id => $attachment ) {
+
+
+                    simsMakeThumbs($id,array('simple_coverflow_thumb','large')); //makes resized images
+
+                }
+            }            
+        }
 
         /**
         * Display
@@ -207,10 +237,7 @@
         * @param mixed $attributes
         */
         function render($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes){
-
-
-            /* Open the gallery <div>. */
-
+            
 
             //$numberOfImages= count($attachments);
             /* $r='<div style=\"position: relative;z-index:20; width:100%\"> 
@@ -266,9 +293,7 @@
                 /* Link to attachment page. */
                 elseif ( empty( $link ) || 'attachment' == $link ) {
                     $output .= wp_get_attachment_link( $id, $size, true, false );
-
-
-
+                    
                 }
 
                 /* If user wants to link to neither the image file nor attachment. */
@@ -279,27 +304,19 @@
 
                 /* If 'image_link' is set to full, large, medium, or thumbnail. */
                 elseif ( 'full' == $link || in_array( $link, get_intermediate_image_sizes() ) ) {
+
                     $img_src = wp_get_attachment_image_src( $id, $link );
 
+                    /* Output the link. */
+                    $output .= '<a href="' .  $img_src['0'].'" title="' . $title . '"' . $attributes . '>';
 
-                    simsMakeThumbs($id); //makes resized images
+                    $size='simple_coverflow_thumb';
+                    $img = wp_get_attachment_image_src( $id, $size );
+                    $output .= '<img src="' . $img[0] . '" alt="' . $title . '" title="' . $title . '" />';
+
+                    $output .= '</a>';
 
 
-                    if($attachment->post_mime_type=='audio/mpeg'){
-                        $output .= '<a href="' .  $attachment->guid . '" title="' . $title . '"' . $attributes . '>'.$title.'</a>';
-                    }else{
-
-                        /* Output the link. */
-                        $output .= '<a href="' .  $img_src[0] . '" title="' . $title . '"' . $attributes . '>';
-
-                        $size='simple_coverflow_thumb';
-                        $img = wp_get_attachment_image_src( $id, $size );
-
-                        $output .= '<img src="' . $img[0] . '" alt="' . $title . '" title="' . $title . '" />';
-
-                        $output .= '</a>';
-
-                    }
 
                 }
 
@@ -310,7 +327,7 @@
                 if ( $captiontag && $caption ) {
                     $output .= "\n\t\t\t\t\t\t<{$captiontag} class='simple_coverflow-caption'>";
 
-                    if ( cleaner_gallery_get_setting( 'caption_link' ) )
+                    if ( simple_coverflow_get_setting( 'caption_link' ) )
                         $output .= '<a href="' . get_attachment_link( $id ) . '" title="' . $title . '">' . $caption . '</a>';
 
                     else
