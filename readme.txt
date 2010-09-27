@@ -67,6 +67,9 @@ Added admin panel, for those who dont like to dive in the php
 you can set width of coverflow. Set it equal to your content area in the theme
 you can set where the image link to
 
+= Version 1.0.0 = 
+added view with hidden buttons
+You can select view in admin panel
  
 ==Upgrade Notice ==
 To upgrade from a previous version of this plugin, delete the entire folder and files from the previous version of the plugin and then follow the installation instructions below.

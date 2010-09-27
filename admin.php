@@ -116,7 +116,9 @@
         $settings['thickbox_js'] = ( ( isset( $_POST['thickbox_js'] ) ) ? true : false );
         $settings['thickbox_css'] = ( ( isset( $_POST['thickbox_css'] ) ) ? true : false );
         $settings['coverflow_width'] = esc_html( $_POST['coverflow_width'] ); 
-        
+        $settings['cView'] = esc_html( $_POST['cView'] );
+        $settings['border'] = esc_html( $_POST['border'] ); 
+
         /* Update the theme settings. */
         $updated = update_option( 'simple_coverflow_settings', $settings );
     }
@@ -165,26 +167,50 @@
     * @since 0.8
     */
     function simple_coverflow_general_meta_box() {
-     
+
         foreach ( get_intermediate_image_sizes() as $size ){
             $image_sizes[$size] = $size;
 
-        $image_link = array( '' => '', 'none' => __( 'None', 'simple-coverflow' ), 'attachment' => __( 'Attachment Page', 'simple_coverflow' ) );
-        $image_link = array_merge( $image_link, $image_sizes );
-        $image_link['full'] = 'full'; 
-    }
-        ?>
+            $image_link = array( '' => '', 'none' => __( 'None', 'simple-coverflow' ), 'attachment' => __( 'Attachment Page', 'simple_coverflow' ) );
+            $image_link = array_merge( $image_link, $image_sizes );
+            $image_link['full'] = 'full'; 
+        }
+    ?>
 
     <table class="form-table">
 
         <tr>
             <th><?php _e( 'Coverflow Width:', 'simple-coverflow' ); ?></th>
             <td>
-           <input id="coveflow-width" name="coverflow_width" type="input"  value="<?php echo simple_coverflow_get_setting( 'coverflow_width' ); ?>" /> 
+                <input id="coveflow-width" name="coverflow_width" type="input"  value="<?php echo simple_coverflow_get_setting( 'coverflow_width' ); ?>" /> 
                 <label for="coveflow-width"><?php _e( 'Set width of your coverflow', 'simple-coverflow' ); ?></label>
-                 </td>
+            </td>
         </tr>
         <tr>
+            <th><?php _e( 'Border Width:', 'simple-coverflow' ); ?></th>
+            <td>
+                <input id="border-width" name="border" type="input"  value="<?php echo simple_coverflow_get_setting( 'border' ); ?>" /> 
+                <label for="coveflow-width"><?php _e( 'Set width border arround images', 'simple-coverflow' ); ?></label>
+            </td>
+        </tr>
+        
+                <tr>
+            <th><?php _e( 'Select view:', 'simple-coverflow' ); ?></th>
+            <td>
+                <?php _e( 'Select default view or hide Arrows', 'simple_coverflow' ); ?>
+                <br />
+                <select id="cView" name="cView">
+                    <option <?php selected( 'default', simple_coverflow_get_setting( 'cView' ) ); ?> value="<?php echo 'default'; ?>"><?php echo 'default' ?></option>
+                    <option <?php selected( 'hideArrows', simple_coverflow_get_setting( 'cView' ) ); ?> value="<?php echo 'hideArrows'; ?>"><?php echo 'hide Arrows'; ?></option>
+
+                </select>
+            </td>
+        </tr>
+        
+        <tr>
+        
+        
+        
             <th><?php _e( 'Captions:', 'simple-coverflow' ); ?></th>
             <td>
                 <input id="caption_remove" name="caption_remove" type="checkbox" <?php checked( simple_coverflow_get_setting( 'caption_remove' ), true ); ?> value="true" /> 
@@ -211,17 +237,22 @@
             </td>
         </tr>
 
-       <!-- <tr>
-            <th><?php _e( 'Default Image Size:', 'simple-coverflow' ); ?></th>
-            <td>
-                <select name="size" id="size">
-                    <?php foreach ( get_intermediate_image_sizes() as $size ) { ?>
-                        <option value="<?php echo $size; ?>" <?php selected( $size, simple_coverflow_get_setting( 'size' ) ); ?>><?php echo $size; ?></option>
-                        <?php } ?>
-                </select>
-            </td>
+
+
+
+
+
+        <!-- <tr>
+        <th><?php _e( 'Default Image Size:', 'simple-coverflow' ); ?></th>
+        <td>
+        <select name="size" id="size">
+        <?php foreach ( get_intermediate_image_sizes() as $size ) { ?>
+            <option value="<?php echo $size; ?>" <?php selected( $size, simple_coverflow_get_setting( 'size' ) ); ?>><?php echo $size; ?></option>
+            <?php } ?>
+        </select>
+        </td>
         </tr>
-           -->
+        -->
         <tr>
             <th><?php _e( 'Default Order:', 'simple-coverflow' ); ?></th>
             <td>

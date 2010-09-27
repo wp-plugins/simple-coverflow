@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 0.9.3
+    * Version: 1.0.0
     * Author: Simon Hansen
     * Author URI: http://simonhans.dk
     *
@@ -14,7 +14,7 @@
     * @link http://jquery.com/demo/thickbox
     *
     * @copyright 2010- 2010
-    * @version 0.9.2
+    * @version 1.0.0
     * @author Simon Hansen
     * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     *
@@ -69,24 +69,39 @@
         }
 
 
-        /**
-        * register the thumbnal size. Used to resize when upload and if image does not exist
-        * 
-        */
-        function simple_coverflow_img_size() {
+        function getContentWidth(){
+
             global $content_width; //get width from theme
+
             $w=simple_coverflow_get_setting('coverflow_width' );
             if($w){   //if content width is set in backend
                 $content_width=$w;
             }
 
-            $this->setContentWidth($content_width);
+            // $simple_coverflow->settings['content_width']=$content_width;
+            return $content_width;
+        }
 
-            $width=$this->content_width/4;
-            $height=$this->content_width/4;
 
-            add_image_size('simple_coverflow_thumb',$width,$height, true);
-           // add_image_size('large',400,600,false);
+
+
+
+        function getCoverflowThumbImgWidth(){
+            $border=simple_coverflow_get_setting('border' );
+            $width=($this->getContentWidth()-3*$border)/4;
+            return $width; 
+        }
+
+
+        /**
+        * register the thumbnal size. Used to resize when upload and if image does not exist
+        * 
+        */
+        function simple_coverflow_img_size() {
+
+
+            $width=$this->getCoverflowThumbImgWidth();
+            add_image_size('simple_coverflow_thumb',$width,$width, true);
 
         }
 
@@ -120,9 +135,29 @@
 
 
 
-    function simple_coverflow_get_setting( $option = '' ) {
+
+
+    function simple_coverflow_set_setting(){
         global $simple_coverflow;
 
+        //set itemwidth vvar
+
+
+        global $content_width; //get width from theme
+
+        $w=simple_coverflow_get_setting('coverflow_width' );
+        if($w){   //if content width is set in backend
+            $content_width=$w;
+        }else{
+
+            $simple_coverflow->settings['coverflow_width']=640;
+        }
+        $simple_coverflow->settings['itemWidth']=($content_width-3*simple_coverflow_get_setting('border'))/4;
+
+    }
+
+    function simple_coverflow_get_setting( $option = '' ) {
+        global $simple_coverflow;
         if ( !$option )
             return false;
 
@@ -134,7 +169,10 @@
 
 
 
+
     $r=new simple_coverflow_controller();
+    simple_coverflow_set_setting();
+
 
 
 
