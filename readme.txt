@@ -7,7 +7,8 @@ Tested up to: 3.0
 Stable tag: Trunk
 
 
-A very simple coverflow plugin. For php programmers easy to modiffy
+A very simple coverflow plugin. For php programmers easy to modiffy. 
+To see example of use go here <a href="www.simonhans.dk">simonhans.dk</a>
 
 == Description ==   
 
@@ -70,6 +71,12 @@ you can set where the image link to
 = Version 1.0.0 = 
 added view with hidden buttons
 You can select view in admin panel
+
+= Version 1.5.0 =
+implemented timthumb for resizing of thumbnails
+added an example of how to make your own wievs "def_view"
+Added posibility to make border around image set
+
  
 ==Upgrade Notice ==
 To upgrade from a previous version of this plugin, delete the entire folder and files from the previous version of the plugin and then follow the installation instructions below.

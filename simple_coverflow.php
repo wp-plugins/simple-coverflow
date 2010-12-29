@@ -1,9 +1,9 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.0.0
+    * Version: 1.5.0
     * Author: Simon Hansen
-    * Author URI: http://simonhans.dk
+    * Author URI: http://www.simonhans.dk
     *
     * 
     *
@@ -29,7 +29,24 @@
 
 
 
-    require_once( dirname (__FILE__) . '/gallery.php' );
+    define( 'SIMPLE_COVERFLOW_DIR', plugin_dir_path( __FILE__ ) );
+    define( 'SIMPLE_COVERFLOW_URL', plugin_dir_url( __FILE__ ) );
+
+
+
+    if(!is_admin()){ //only for frontend
+
+        // include view
+        require_once( dirname (__FILE__) . '/views/first_view/gallery.php' );
+
+        //include_once(dirname(__FILE__)."/views/def_view/def_view.php");
+        simple_coverflow_set_setting();
+
+    }else // only for backend
+    {
+        require_once( SIMPLE_COVERFLOW_DIR . 'admin.php' );
+    }
+
 
 
 
@@ -40,27 +57,57 @@
 
         function __construct() {
 
-
-
             /* Set up the plugin. */
             add_action( 'plugins_loaded', array($this,'simple_coverflow_setup' ));
-            add_action( 'after_setup_theme', array($this,'simple_coverflow_img_size' ));
-            add_shortcode('coverflow',array($this,'coverflow_handler'));
+            add_shortcode('coverflow',array($this,'shortcode_handler'));
 
-            if(!is_admin()){ //only include for frontend
-
-                $this->obj=new simple_coverflow();
-            }
         }
+        /**
+        * php 4 constructer
+        * 
+        */
         function simple_coverflow_handler(){
             $this->__construct();
         }
 
 
-        function coverflow_handler($attr){
+        /**
+        * get images fron post
+        * 
+        */
+        function data() {
+            global $post;
+            $children = array(
+            'post_parent' => $post->ID,
+            'post_status' => 'inherit',
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            );
 
-            return $this->obj->cowerflow($attr); 
 
+            /* Get image attachments. If none, return. */
+            $attachments = get_children( $children );
+            return $attachments ;
+        }
+
+        /**
+        * method called by shortcode 
+        * 
+        * @param mixed $attr
+        */
+
+        function shortcode_handler($attr){
+
+            if($attr['view']=="def"){
+                $attachments=$this->data();
+                $r=new defView($attachments);
+                return $r->render();
+
+            }else{
+
+                $obj=new simple_coverflow();
+                return $obj->cowerflow($attr); 
+            }
         }
 
         function setContentWidth($content_width){
@@ -69,65 +116,8 @@
         }
 
 
-        function getContentWidth(){
 
-            global $content_width; //get width from theme
-
-            $w=simple_coverflow_get_setting('coverflow_width' );
-            if($w){   //if content width is set in backend
-                $content_width=$w;
-            }
-
-            // $simple_coverflow->settings['content_width']=$content_width;
-            return $content_width;
-        }
-
-
-
-
-
-        function getCoverflowThumbImgWidth(){
-            $border=simple_coverflow_get_setting('border' );
-            $width=($this->getContentWidth()-3*$border)/4;
-            return $width; 
-        }
-
-
-        /**
-        * register the thumbnal size. Used to resize when upload and if image does not exist
-        * 
-        */
-        function simple_coverflow_img_size() {
-
-
-            $width=$this->getCoverflowThumbImgWidth();
-            add_image_size('simple_coverflow_thumb',$width,$width, true);
-
-        }
-
-
-
-        /**
-        * Sets up the Simple coverflow  plugin and loads files at the appropriate time.
-        *
-        * @since 0.1
-        */
         function simple_coverflow_setup() {
-
-            /* Set constant path to the  simple_coverflow plugin directory. */
-
-            define( 'SIMPLE_COVERFLOW_DIR', plugin_dir_path( __FILE__ ) );
-
-            /* Set constant path to the Cleaner Gallery plugin URL. */
-            define( 'SIMPLE_COVERFLOW_URL', plugin_dir_url( __FILE__ ) );
-
-            if(!is_admin()){ //only include for frontend
-
-                require_once (dirname (__FILE__) . '/simple_coverflow_func.php');
-            }else      {
-                require_once( SIMPLE_COVERFLOW_DIR . 'admin.php' );
-            }
-
 
             do_action( 'simple_coverflow_loaded' );
         }
@@ -145,14 +135,29 @@
 
         global $content_width; //get width from theme
 
-        $w=simple_coverflow_get_setting('coverflow_width' );
-        if($w){   //if content width is set in backend
-            $content_width=$w;
+        $content_width=simple_coverflow_get_setting('coverflow_width' );
+
+
+        $frame=simple_coverflow_get_setting('frame');
+        if($frame){
+
+            //skal kunne divideres med 4
+            $borderWidth=simple_coverflow_get_setting('border' );
+            $imgWidth=($content_width-5*$borderWidth)/4;
+            $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
+
         }else{
 
-            $simple_coverflow->settings['coverflow_width']=640;
+            //skal kunne divideres med 4
+            $borderWidth=simple_coverflow_get_setting('border' );
+            $imgWidth=($content_width-3*$borderWidth)/4;
+            $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
+
         }
-        $simple_coverflow->settings['itemWidth']=($content_width-3*simple_coverflow_get_setting('border'))/4;
+
+        //override the set width to make it dividebel by 4
+        $simple_coverflow->settings['coverflow_width']=$widthOfCoverflow;
+        $simple_coverflow->settings['itemWidth']=($widthOfCoverflow-3*simple_coverflow_get_setting('border'))/4;
 
     }
 
@@ -169,9 +174,7 @@
 
 
 
-
-    $r=new simple_coverflow_controller();
-    simple_coverflow_set_setting();
+    new simple_coverflow_controller();
 
 
 

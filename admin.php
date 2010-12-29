@@ -118,7 +118,10 @@
         $settings['coverflow_width'] = esc_html( $_POST['coverflow_width'] ); 
         $settings['cView'] = esc_html( $_POST['cView'] );
         $settings['border'] = esc_html( $_POST['border'] ); 
+        $settings['frame'] = ( ( isset( $_POST['frame'] ) ) ? true : false );
+        $settings['frameColor'] = esc_html( $_POST['frameColor'] ); 
 
+        
         /* Update the theme settings. */
         $updated = update_option( 'simple_coverflow_settings', $settings );
     }
@@ -187,10 +190,25 @@
             </td>
         </tr>
         <tr>
-            <th><?php _e( 'Border Width:', 'simple-coverflow' ); ?></th>
+            <th><?php _e( 'Space Width:', 'simple-coverflow' ); ?></th>
             <td>
                 <input id="border-width" name="border" type="input"  value="<?php echo simple_coverflow_get_setting( 'border' ); ?>" /> 
-                <label for="coveflow-width"><?php _e( 'Set width border arround images', 'simple-coverflow' ); ?></label>
+                <label for="coveflow-width"><?php _e( 'Set space width between images', 'simple-coverflow' ); ?></label>
+            </td>
+        </tr>
+
+        <tr>
+            <th><?php _e( 'Frame around images:', 'simple-coverflow' ); ?></th>
+            <td>
+
+            
+                <input id="frame" name="frame" type="checkbox" <?php checked( simple_coverflow_get_setting( 'frame' ), true ); ?> value="true" /> 
+
+                <label for="coveflow-width"><?php _e( 'Frame around images', 'simple-coverflow' ); ?></label>
+
+                <input id="frame-color" name="frameColor" type="input"  value="<?php echo simple_coverflow_get_setting( 'frameColor' ); ?>" /> 
+                <label for="coveflow-width"><?php _e( 'HEX color of frame', 'simple-coverflow' ); ?></label>
+
             </td>
         </tr>
         
