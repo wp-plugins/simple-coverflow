@@ -36,7 +36,6 @@
     padding: 0;
     }
 .simple_coverflow .simple_coverflow-item img, .simple_coverflow .simple_coverflow-item img.thumbnail {
-    max-width: 89%;
     height: auto;
     padding: 0;
     margin: 0 auto;

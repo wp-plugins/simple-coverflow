@@ -5,6 +5,12 @@
     * @package simple-coverflow
     */
 
+    /* Load any scripts needed. */
+
+    if(!is_admin()){ //we only want to include for frontend
+        add_action('wp_print_scripts',array('simple_coverflow','javascript_and_css'));
+        add_action( 'template_redirect', array('simple_coverflow','include_css_and_js_scripts'));
+    }
 
 
 
@@ -48,18 +54,62 @@
             $content_width=simple_coverflow_get_setting('coverflow_width');   //get content width from theme   
 
             $itemwidth=simple_coverflow_get_setting('itemWidth');
-            $border=simple_coverflow_get_setting('border');
+            $borderWidth=simple_coverflow_get_setting('border');
+
+            $bordercolor=simple_coverflow_get_setting('frameColor');
+
+            $frame=simple_coverflow_get_setting('frame');
+            if($frame){
+
+                $css='.simple_coverflow{
+
+                width: '.intval(($content_width)).'px;
+                border-left:'.$borderWidth.'px solid '.$bordercolor.';
+                border-right:'.$borderWidth.'px solid '.$bordercolor.';
+                background-color:'.$bordercolor.';
+
+                }
+
+                #content .simple_coverflow .simple_coverflow-item{
+                width: '.intval(($itemwidth)).'px;
+                background-color:'.$bordercolor.';
+                float:left;
+                }
+                ';
+
+            }else{
+                $css='.simple_coverflow{
+
+                width: '.intval(($content_width)).'px;
+
+                }
+
+                #content .simple_coverflow .simple_coverflow-item{
+                width: '.intval(($itemwidth)).'px;
+                float:left;
+                }
+
+                ';    
+            }
 
             echo '<style type="text/css">  
 
-            .simple_coverflow{
+            '.$css.'
 
-            width: '.intval(($content_width)).'px;
+
+
+            #content .simple_coverflow .simple_coverflow-icon{
+            background-color:#fff;
+            display: table-cell; /* to make vertical-align work*/
+            vertical-align: middle;
+            /* line-height:'.intval(($itemwidth)).'px;*/
+            width:'.intval(($itemwidth)).'px;
+            height:'.intval(($itemwidth)).'px;
+            }
+            #content .simple_coverflow .simple_coverflow-icon img{
+            vertical-align: middle;
             }
 
-            #content .simple_coverflow .simple_coverflow-item{
-            width: '.intval(($itemwidth)).'px;
-            float:left;
             </style>
             ';
 
@@ -67,7 +117,7 @@
             //<![CDATA[
             var simple_cover_content_width=  \''.$content_width.'\';                            
             var simple_cover_flow_id =  \''.$id.'\';
-            var simple_cover_border =  \''.$border.'\';                            
+            var simple_cover_border =  \''.$borderWidth.'\';                            
             //]]>
             </script>';
 
@@ -82,12 +132,11 @@
         *
         * @since 0.8
         */
-        function simple_coverflow_enqueue_script() {
+        function include_css_and_js_scripts() {
 
             wp_enqueue_script('jquery');
-            add_action('wp_print_scripts', array($this,'javascript_and_css'));
-            wp_enqueue_script('simple_coverflow_js', WP_CONTENT_URL . '/plugins/simple-coverflow/javascript.js', array('jquery'));
-            wp_enqueue_style('simple_coverflow_style', WP_CONTENT_URL . '/plugins/simple-coverflow/style.css');
+            wp_enqueue_script('simple_coverflow_js2', WP_CONTENT_URL . '/plugins/simple-coverflow/views/first_view/javascript.js', array('jquery'));
+            wp_enqueue_style('simple_coverflow_style', WP_CONTENT_URL . '/plugins/simple-coverflow/views/first_view/style.css');
 
             wp_enqueue_script( 'thickbox' );
         }
@@ -98,8 +147,6 @@
         */
         function simple_coverflow(){
 
-            /* Load any scripts needed. */
-            add_action( 'template_redirect', array($this,'simple_coverflow_enqueue_script' ));
 
 
             return;
@@ -191,7 +238,6 @@
             /* Class and rel attributes. */
             $attributes ='class="thickbox" rel="clean-gallery-'.$gallery_id.'"';
 
-            $this->generateResize($attachments);
 
             if($cView=='hideArrows'){
                 $output=$this->renderHideArrows($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes);
@@ -206,31 +252,65 @@
 
         }
 
-        /**
-        * put your comment there...
-        * 
-        * @param mixed $attachments
-        */
-        function generateResize($attachments){
-
-            if($_GET['gen']==''){ //only generate if gen is set
-
-                foreach ( $attachments as $id => $attachment ) {
-
-
-                    simsMakeThumbs($id,array('simple_coverflow_thumb','large')); //makes resized images
-
-                }
-            }            
-        }
 
 
         function getBorder(){
 
-            $border=simple_coverflow_get_setting('border');  
+            $borderWidth=simple_coverflow_get_setting('border');  
 
-            return ' style="padding-top:'.$border.'px;padding-bottom:'.$border.'px; padding-right:'.$border.'px" ';
+            return ' style="padding-top:'.$borderWidth.'px;padding-bottom:'.$borderWidth.'px; padding-right:'.$borderWidth.'px" ';
         }
+
+
+        /**
+        * Gets the thumbnail.
+        *
+        * @param $postID The post ID of the thumbnail.
+        * @param $width The width of the thumbnail (optional)
+        * @param $height The height of the thumbnail (optional)
+        * @param $fileType The file type of the thumbnail; jpg, png, or gif (optional)
+        * @return The URL of the thumbnail.
+        */
+        function getThumbnail($filePath, $width="", $height="", $fileType="")
+        {
+
+            if ( empty($width) )
+                if ( empty($height) )
+                    if ( empty($fileType) )
+                        $fileType = "jpg";
+
+                    return WP_PLUGIN_URL . "/simple-coverflow/timthumb.php?src=" .
+            $filePath. "&amp;w=" . $width . "&amp;h=" . $height . "&amp;zc=1&amp;ft=" . $fileType;
+        }
+
+
+
+
+        function getContentWidth(){
+
+            global $content_width; //get width from theme
+
+            $w=simple_coverflow_get_setting('coverflow_width' );
+            if($w){   //if content width is set in backend
+                $content_width=$w;
+            }
+
+            return $content_width;
+        }
+
+
+
+
+
+        function getCoverflowThumbImgWidth(){
+            $border=simple_coverflow_get_setting('border' );
+
+            $width=($this->getContentWidth()-3*$border)/4;
+
+            return $width; 
+        }
+
+
 
         function renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes){
 
@@ -283,9 +363,12 @@
 
                     /* Output the link. */
                     $output .= '<a href="' .  $img_src['0'].'" title="' . $title . '"' . $attributes . '>';
-                    $size='simple_coverflow_thumb';
-                    $img = wp_get_attachment_image_src( $id, $size );
-                    $output .= '<img src="' . $img[0] . '" alt="' . $title . '" title="' . $title . '" />';
+
+
+                    $thumb= $this->getThumbnail($img_src['0'], $this->getCoverflowThumbImgWidth(), $this->getCoverflowThumbImgWidth(), 'jpg');
+
+                    $output .= '<img src="' . $thumb . '" alt="' . $title . '" title="' . $title . '" />';
+
                     $output .= '</a>';
 
                 }
