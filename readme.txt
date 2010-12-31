@@ -15,6 +15,8 @@ To see example of use go here <a href="www.simonhans.dk">simonhans.dk</a>
 A very simple coverflow plugin. For php programmers easy to modiffy
 insert shortag [coverflow] in your post and the plugin wil use your gallery images in a coverflow
 
+To see example of use go here:
+* <a href="http://simonhans.dk/galleri/">Demonstration</a>
 
 == Installation == 
 
