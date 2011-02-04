@@ -8,15 +8,16 @@ Stable tag: Trunk
 
 
 A very simple coverflow plugin. For php programmers easy to modiffy. 
-To see example of use go here <a href="www.simonhans.dk">simonhans.dk</a>
 
 == Description ==   
 
 A very simple coverflow plugin. For php programmers easy to modiffy
 insert shortag [coverflow] in your post and the plugin wil use your gallery images in a coverflow
 
+
 To see example of use go here:
-* <a href="http://simonhans.dk/galleri/">Demonstration</a>
+<a href="http://simonhans.dk/galleri/">Demonstration</a>
+
 
 == Installation == 
 
@@ -39,12 +40,7 @@ insert shortag [coverflow] in your post and the plugin wil use your gallery imag
 ##How to use:##
 insert shortag [coverflow] in your post and the plugin wil use your gallery images in a coverflow
 
-##width of coverflow##
-Many themes does not have the var $content_width set in the themes function file. Find the width of the content block and insert it like this
 
-if ( ! isset( $content_width ) )
-    $content_width = 548;
- 
 ==Changelog ==
 = Version 0.8 =    
 *inital release
@@ -78,6 +74,11 @@ You can select view in admin panel
 implemented timthumb for resizing of thumbnails
 added an example of how to make your own wievs "def_view"
 Added posibility to make border around image set
+
+= Version 1.5.1 =                               
+bugFixes
+ 
+
 
  
 ==Upgrade Notice ==

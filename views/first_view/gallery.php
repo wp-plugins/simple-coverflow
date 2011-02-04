@@ -17,6 +17,8 @@
 
     class simple_coverflow{
 
+        private $settings;
+
 
         function simple_coverflow_default_settings( $id) {
 
@@ -38,27 +40,33 @@
             'offset' => ''
             );
 
-            $defaults['order'] = ( ( simple_coverflow_get_setting( 'order' ) ) ? simple_coverflow_get_setting( 'order' ) : 'ASC' );
-            $defaults['orderby'] = ( ( simple_coverflow_get_setting( 'orderby' ) ) ? simple_coverflow_get_setting( 'orderby' ) : 'menu_order ID' );
-            $defaults['size'] = ( ( simple_coverflow_get_setting( 'size' ) ) ? simple_coverflow_get_setting( 'size' ) : 'thumbnail' );
-            $defaults['link'] = ( ( simple_coverflow_get_setting( 'image_link' ) ) ? simple_coverflow_get_setting( 'image_link' ) : '' );
-            $defaults['cView'] = ( ( simple_coverflow_get_setting( 'cView' ) ) ? simple_coverflow_get_setting( 'cView' ) : '' );
+            $defaults['order'] = ( ( $this->settings->get_setting( 'order' ) ) ? $this->settings->get_setting( 'order' ) : 'ASC' );
+            $defaults['orderby'] = ( ( $this->settings->get_setting( 'orderby' ) ) ? $this->settings->get_setting( 'orderby' ) : 'menu_order ID' );
+            $defaults['size'] = ( ( $this->settings->get_setting( 'size' ) ) ? $this->settings->get_setting( 'size' ) : 'thumbnail' );
+            $defaults['link'] = ( ( $this->settings->get_setting( 'image_link' ) ) ? $this->settings->get_setting( 'image_link' ) : '' );
+            $defaults['cView'] = ( ( $this->settings->get_setting( 'cView' ) ) ? $this->settings->get_setting( 'cView' ) : '' );
 
             return $defaults;
         }
 
 
+        /**
+        * css an js in the header
+        * 
+        */
         function javascript_and_css(){   
 
+            $settings=new simple_coverflow_settings();
+
             $id='.simscoverflow';
-            $content_width=simple_coverflow_get_setting('coverflow_width');   //get content width from theme   
+            $content_width=$settings->get_setting('coverflow_width');   //get content width from theme   
 
-            $itemwidth=simple_coverflow_get_setting('itemWidth');
-            $borderWidth=simple_coverflow_get_setting('border');
+            $itemwidth=$settings->get_setting('itemWidth');
+            $borderWidth=$settings->get_setting('border');
 
-            $bordercolor=simple_coverflow_get_setting('frameColor');
+            $bordercolor=$settings->get_setting('frameColor');
 
-            $frame=simple_coverflow_get_setting('frame');
+            $frame=$settings->get_setting('frame');
             if($frame){
 
                 $css='.simple_coverflow{
@@ -133,7 +141,7 @@
         * @since 0.8
         */
         function include_css_and_js_scripts() {
-
+            wp_enqueue_style( 'thickbox' );     
             wp_enqueue_script('jquery');
             wp_enqueue_script('simple_coverflow_js2', WP_CONTENT_URL . '/plugins/simple-coverflow/views/first_view/javascript.js', array('jquery'));
             wp_enqueue_style('simple_coverflow_style', WP_CONTENT_URL . '/plugins/simple-coverflow/views/first_view/style.css');
@@ -141,6 +149,12 @@
             wp_enqueue_script( 'thickbox' );
         }
 
+
+        function __construct(){
+            $this->settings=new simple_coverflow_settings();
+
+            return ;
+        }
         /**
         * Constructor
         * 
@@ -148,6 +162,7 @@
         function simple_coverflow(){
 
 
+            $this->__construct();
 
             return;
         }
@@ -256,7 +271,7 @@
 
         function getBorder(){
 
-            $borderWidth=simple_coverflow_get_setting('border');  
+            $borderWidth=$this->settings->get_setting('border');  
 
             return ' style="padding-top:'.$borderWidth.'px;padding-bottom:'.$borderWidth.'px; padding-right:'.$borderWidth.'px" ';
         }
@@ -290,7 +305,7 @@
 
             global $content_width; //get width from theme
 
-            $w=simple_coverflow_get_setting('coverflow_width' );
+            $w=$this->settings->get_setting('coverflow_width' );
             if($w){   //if content width is set in backend
                 $content_width=$w;
             }
@@ -302,19 +317,10 @@
 
 
 
-        function getCoverflowThumbImgWidth(){
-            $border=simple_coverflow_get_setting('border' );
-
-            $width=($this->getContentWidth()-3*$border)/4;
-
-            return $width; 
-        }
-
-
 
         function renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes){
-
-
+                     
+                   
             $padding=$this->getBorder();
 
             /* Loop through each attachment. */
@@ -337,23 +343,23 @@
                 /* If user links to file. */
                 if ( 'file' == $link ) {
 
-                    $output .= '<a href="' .  wp_get_attachment_url( $id ) . '" title="' . $title . '"' . $attributes . '>';
-                    $img = wp_get_attachment_image_src( $id, $size );
-                    $output .= '<img src="' . $img[0] . '" alt="' . $title . '" title="' . $title . '" />';
-                    $output .= '</a>';
+                    $img_src = wp_get_attachment_image_src( $id, $size );
+                    $linkto=$img_src['0'];
+
                 }
 
 
                 /* Link to attachment page. */
                 elseif ( empty( $link ) || 'attachment' == $link ) {
 
-                    $output .= wp_get_attachment_link( $id, $size, true, false );
+                    $linkto= wp_get_attachment_url( $id, $size, true, false );
                 }
 
                 /* If user wants to link to neither the image file nor attachment. */
                 elseif ( 'none' == $link ) {
-                    $img = wp_get_attachment_image_src( $id, $size );
-                    $output .= '<img src="' . $img[0] . '" alt="' . $title . '" title="' . $title . '" />';
+                    $img_src  = wp_get_attachment_image_src( $id, $size );
+                    $linkto=$img_src['0'];
+
                 }
 
                 /* If 'image_link' is set to full, large, medium, or thumbnail. */
@@ -361,17 +367,22 @@
 
                     $img_src = wp_get_attachment_image_src( $id, $link );
 
-                    /* Output the link. */
-                    $output .= '<a href="' .  $img_src['0'].'" title="' . $title . '"' . $attributes . '>';
-
-
-                    $thumb= $this->getThumbnail($img_src['0'], $this->getCoverflowThumbImgWidth(), $this->getCoverflowThumbImgWidth(), 'jpg');
-
-                    $output .= '<img src="' . $thumb . '" alt="' . $title . '" title="' . $title . '" />';
-
-                    $output .= '</a>';
-
+                    $linkto=$img_src['0'];
                 }
+                /* Output the link. */
+
+                $img_src = wp_get_attachment_image_src( $id, 'full');
+
+                $output .= '<a href="' . $linkto .'" title="' . $title . '" ' . $attributes . '>';
+                if($r=true)$this->firstImg=$img_src['0']; //make link to first image
+                $r=false;
+                $thumb= $this->getThumbnail($img_src['0'], $this->settings->get_setting('itemWidth'), $this->settings->get_setting('itemWidth'), 'jpg');
+
+                $output .= '<img src="' . $thumb . '" alt="' . $title . '" title="' . $title . '" />';
+
+                $output .= '</a>';
+
+
 
                 /* Close the image wrapper. */
                 $output .= "</{$icontag}>";
@@ -380,7 +391,7 @@
                 if ( $captiontag && $caption ) {
                     $output .= "\n\t\t\t\t\t\t<{$captiontag} class='simple_coverflow-caption'>";
 
-                    if ( simple_coverflow_get_setting( 'caption_link' )){
+                    if ( $this->settings->get_setting( 'caption_link' )){
                         $output .= '<a href="' . get_attachment_link( $id ) . '" title="' . $title . '">' . $caption . '</a>';
 
                     }else{
@@ -403,7 +414,7 @@
 
 
         function imgWidth(){
-            return  simple_coverflow_get_setting('coverflow_width' )/4;  
+            return  $this->settings->get_setting('coverflow_width' )/4;  
         }
 
         /**
@@ -423,6 +434,7 @@
 
             $pos=($this->imgWidth()/2)-20;
 
+            $imgs=$this->renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes);
             $buttons='
             <div id="buttons_'.$unike_id.'" style="height:0px;display:none;position:relative;z-index:20; width:100%"> 
             <div style="height:0px;position: absolute;z-index:100; width:100%">
@@ -434,11 +446,14 @@
 
             $output = "\t\t\t
 
-            <div id='simple_coverflow-{$unike_id}' class=' length simple_coverflow  simple_coverflow-{$id}'>". $buttons;
+            <div id='simple_coverflow-{$unike_id}' class=' length simple_coverflow  simple_coverflow-{$id}'>
+
+            <div  id='frame-{$unike_id}'><img src=\"".$this->firstImg."\" style='width:{$this->settings->get_setting('coverflow_width')}px'  /></div>
+            ". $buttons;
 
             $output .= "\n\t\t\t\t<div  class='simscoverflow simple_coverflow-row   clear'>";
 
-            $output.=$this->renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes);
+            $output.=$imgs;
 
             $output .= "\n\t\t\t</div></div>\n";
 

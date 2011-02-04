@@ -60,6 +60,15 @@ simple_coverflow={
 
 jQuery(document).ready(function(){
     numOfCoverflows=jQuery('#content').find('.simple_coverflow').length;
+    
+    /**
+    * 
+    */
+    /*jQuery('.simple_coverflow a').click(function(){
+        jQuery('#frame-1 img').attr('src',jQuery(this).attr('href'));
+        return false;
+    }) */
+    
     obj_simple_coverflow=Array();
     for (i=0;i<=numOfCoverflows;i++){   
 

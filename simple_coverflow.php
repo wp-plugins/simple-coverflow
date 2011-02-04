@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.5.0
+    * Version: 1.5.1
     * Author: Simon Hansen
     * Author URI: http://www.simonhans.dk
     *
@@ -40,7 +40,6 @@
         require_once( dirname (__FILE__) . '/views/first_view/gallery.php' );
 
         //include_once(dirname(__FILE__)."/views/def_view/def_view.php");
-        simple_coverflow_set_setting();
 
     }else // only for backend
     {
@@ -53,7 +52,6 @@
 
     class simple_coverflow_controller{
         var $obj;
-        var $content_width;
 
         function __construct() {
 
@@ -72,7 +70,7 @@
 
 
         /**
-        * get images fron post
+        * get images from post
         * 
         */
         function data() {
@@ -98,7 +96,7 @@
 
         function shortcode_handler($attr){
 
-            if($attr['view']=="def"){
+            if($attr['view']=="def" and class_exists('defView')){
                 $attachments=$this->data();
                 $r=new defView($attachments);
                 return $r->render();
@@ -125,52 +123,68 @@
 
 
 
+    class simple_coverflow_settings{
 
+        private $settings;
 
-    function simple_coverflow_set_setting(){
-        global $simple_coverflow;
+        function __CONSTRUCT(){
 
-        //set itemwidth vvar
-
-
-        global $content_width; //get width from theme
-
-        $content_width=simple_coverflow_get_setting('coverflow_width' );
-
-
-        $frame=simple_coverflow_get_setting('frame');
-        if($frame){
-
-            //skal kunne divideres med 4
-            $borderWidth=simple_coverflow_get_setting('border' );
-            $imgWidth=($content_width-5*$borderWidth)/4;
-            $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
-
-        }else{
-
-            //skal kunne divideres med 4
-            $borderWidth=simple_coverflow_get_setting('border' );
-            $imgWidth=($content_width-3*$borderWidth)/4;
-            $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
+            $this->settings = get_option( 'simple_coverflow_settings' );
+            $this->set_setting();
 
         }
 
-        //override the set width to make it dividebel by 4
-        $simple_coverflow->settings['coverflow_width']=$widthOfCoverflow;
-        $simple_coverflow->settings['itemWidth']=($widthOfCoverflow-3*simple_coverflow_get_setting('border'))/4;
 
+
+        /**
+        * calculate widths and add to settings array
+        * 
+        */
+        function set_setting(){
+
+            $content_width=$this->get_setting('coverflow_width' );
+            $frame=$this->get_setting('frame');
+            if($frame){
+
+                //skal kunne divideres med 4
+                $borderWidth=$this->get_setting('border' );
+                $imgWidth=($content_width-5*$borderWidth)/4;
+                $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
+
+            }else{
+
+                //skal kunne divideres med 4
+                $borderWidth=$this->get_setting('border' );
+                $imgWidth=($content_width-3*$borderWidth)/4;
+                $widthOfCoverflow= 4*floor($imgWidth)+3*$borderWidth;
+
+            }
+
+            //override the set width to make it dividebel by 4
+            $this->settings['coverflow_width']=$widthOfCoverflow;
+            $this->settings['itemWidth']=($widthOfCoverflow-3*$this->get_setting('border'))/4;
+
+        }
+
+        function get_setting( $option = '' ) {
+            if ( !$option )
+                return false;
+
+
+            if ( $option=='coverflow_width' ){
+
+                if($this->settings['coverflow_width']==''){
+                    return $this->settings['coverflow_width']=400; //default value 
+                }  
+            }                                 
+
+            return $this->settings[$option];
+
+
+
+        }
     }
 
-    function simple_coverflow_get_setting( $option = '' ) {
-        global $simple_coverflow;
-        if ( !$option )
-            return false;
-
-        if ( !isset( $simple_coverflow->settings ) )
-            $simple_coverflow->settings = get_option( 'simple_coverflow_settings' );
-
-        return $simple_coverflow->settings[$option];
-    }
 
 
 
