@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.5.1
+    * Version: 1.5.2
     * Author: Simon Hansen
     * Author URI: http://www.simonhans.dk
     *
@@ -167,8 +167,9 @@
         }
 
         function get_setting( $option = '' ) {
-            if ( !$option )
+            if ( !$option ){
                 return false;
+            }
 
 
             if ( $option=='coverflow_width' ){
@@ -185,6 +186,8 @@
         }
     }
 
+
+    
 
 
 

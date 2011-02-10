@@ -40,6 +40,9 @@ insert shortag [coverflow] in your post and the plugin wil use your gallery imag
 ##How to use:##
 insert shortag [coverflow] in your post and the plugin wil use your gallery images in a coverflow
 
+make sure your upload folder (wp-content/uploads) is chmoded to 777 as simple-coverflow will try to create a cache dir inside this folder. The folder will be used by tim-thumb thumbnails.
+
+
 
 ==Changelog ==
 = Version 0.8 =    
@@ -77,6 +80,11 @@ Added posibility to make border around image set
 
 = Version 1.5.1 =                               
 bugFixes
+
+
+= Version 1.5.2 =                               
+bugFixes
+ 
  
 
 

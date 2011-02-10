@@ -170,6 +170,8 @@
     * @since 0.8
     */
     function simple_coverflow_general_meta_box() {
+        
+        $settings=get_option( 'simple_coverflow_settings' );
 
         foreach ( get_intermediate_image_sizes() as $size ){
             $image_sizes[$size] = $size;
@@ -185,14 +187,14 @@
         <tr>
             <th><?php _e( 'Coverflow Width:', 'simple-coverflow' ); ?></th>
             <td>
-                <input id="coveflow-width" name="coverflow_width" type="input"  value="<?php echo simple_coverflow_get_setting( 'coverflow_width' ); ?>" /> 
+                <input id="coveflow-width" name="coverflow_width" type="input"  value="<?php echo $settings['coverflow_width' ]; ?>" /> 
                 <label for="coveflow-width"><?php _e( 'Set width of your coverflow', 'simple-coverflow' ); ?></label>
             </td>
         </tr>
         <tr>
             <th><?php _e( 'Space Width:', 'simple-coverflow' ); ?></th>
             <td>
-                <input id="border-width" name="border" type="input"  value="<?php echo simple_coverflow_get_setting( 'border' ); ?>" /> 
+                <input id="border-width" name="border" type="input"  value="<?php echo $settings['border']; ?>" /> 
                 <label for="coveflow-width"><?php _e( 'Set space width between images', 'simple-coverflow' ); ?></label>
             </td>
         </tr>
@@ -202,11 +204,11 @@
             <td>
 
             
-                <input id="frame" name="frame" type="checkbox" <?php checked( simple_coverflow_get_setting( 'frame' ), true ); ?> value="true" /> 
+                <input id="frame" name="frame" type="checkbox" <?php checked( $settings['frame'], true ); ?> value="true" /> 
 
                 <label for="coveflow-width"><?php _e( 'Frame around images', 'simple-coverflow' ); ?></label>
 
-                <input id="frame-color" name="frameColor" type="input"  value="<?php echo simple_coverflow_get_setting( 'frameColor' ); ?>" /> 
+                <input id="frame-color" name="frameColor" type="input"  value="<?php echo $settings['frameColor']; ?>" /> 
                 <label for="coveflow-width"><?php _e( 'HEX color of frame', 'simple-coverflow' ); ?></label>
 
             </td>
@@ -218,8 +220,8 @@
                 <?php _e( 'Select default view or hide Arrows', 'simple_coverflow' ); ?>
                 <br />
                 <select id="cView" name="cView">
-                    <option <?php selected( 'default', simple_coverflow_get_setting( 'cView' ) ); ?> value="<?php echo 'default'; ?>"><?php echo 'default' ?></option>
-                    <option <?php selected( 'hideArrows', simple_coverflow_get_setting( 'cView' ) ); ?> value="<?php echo 'hideArrows'; ?>"><?php echo 'hide Arrows'; ?></option>
+                    <option <?php selected( 'default', $settings['cView'] ); ?> value="<?php echo 'default'; ?>"><?php echo 'default' ?></option>
+                    <option <?php selected( 'hideArrows', $settings['cView']); ?> value="<?php echo 'hideArrows'; ?>"><?php echo 'hide Arrows'; ?></option>
 
                 </select>
             </td>
@@ -231,13 +233,13 @@
         
             <th><?php _e( 'Captions:', 'simple-coverflow' ); ?></th>
             <td>
-                <input id="caption_remove" name="caption_remove" type="checkbox" <?php checked( simple_coverflow_get_setting( 'caption_remove' ), true ); ?> value="true" /> 
+                <input id="caption_remove" name="caption_remove" type="checkbox" <?php checked( $settings['caption_remove'], true ); ?> value="true" /> 
                 <label for="caption_remove"><?php _e( 'Do you want to remove captions from your galleries?', 'simple-coverflow' ); ?></label>
                 <br />
-                <input id="caption_title" name="caption_title" type="checkbox" <?php checked( simple_coverflow_get_setting( 'caption_title' ), true ); ?> value="true" /> 
+                <input id="caption_title" name="caption_title" type="checkbox" <?php checked( $settings['caption_title'], true ); ?> value="true" /> 
                 <label for="caption_title"><?php _e( 'Use the image title as a caption if there is no caption available?', 'simple-coverflow' ); ?></label>
                 <br />
-                <input id="caption_link" name="caption_link" type="checkbox" <?php checked( simple_coverflow_get_setting( 'caption_link' ), true ); ?> value="true" /> 
+                <input id="caption_link" name="caption_link" type="checkbox" <?php checked( $settings['caption_link'], true ); ?> value="true" /> 
                 <label for="caption_link"><?php _e( 'Link captions to the image attachment page?', 'simple-coverflow' ); ?></label>
             </td>
         </tr>
@@ -249,7 +251,7 @@
                 <br />
                 <select id="image_link" name="image_link">
                     <?php foreach ( $image_link as $option => $option_name ) { ?>
-                        <option <?php selected( $option, simple_coverflow_get_setting( 'image_link' ) ); ?> value="<?php echo $option; ?>"><?php echo $option_name; ?></option>
+                        <option <?php selected( $option, $settings[ 'image_link' ] ); ?> value="<?php echo $option; ?>"><?php echo $option_name; ?></option>
                         <?php } ?>
                 </select>
             </td>
@@ -265,7 +267,7 @@
         <td>
         <select name="size" id="size">
         <?php foreach ( get_intermediate_image_sizes() as $size ) { ?>
-            <option value="<?php echo $size; ?>" <?php selected( $size, simple_coverflow_get_setting( 'size' ) ); ?>><?php echo $size; ?></option>
+            <option value="<?php echo $size; ?>" <?php selected( $size, $settings['size'] ); ?>><?php echo $size; ?></option>
             <?php } ?>
         </select>
         </td>
@@ -276,7 +278,7 @@
             <td>
                 <select name="order" id="order">
                     <?php foreach ( array( 'ASC', 'DESC' ) as $order ) { ?>
-                        <option value="<?php echo $order; ?>" <?php selected( $order, simple_coverflow_get_setting( 'order' ) ); ?>><?php echo $order; ?></option>
+                        <option value="<?php echo $order; ?>" <?php selected( $order, $settings[ 'order' ] ); ?>><?php echo $order; ?></option>
                         <?php } ?>
                 </select>
             </td>
@@ -288,7 +290,7 @@
                 <select name="orderby" id="orderby">
                     <?php $orderby_options = array( 'comment_count' => __( 'Comment Count', 'simple-coverflow' ), 'date' => __( 'Date', 'simple-coverflow' ), 'ID' => __( 'ID', 'simple-coverflow' ), 'menu_order' => __( 'Menu Order', 'simple-coverflow' ), 'none' => __( 'None', 'simple-coverflow' ), 'rand' => __( 'Random', 'simple-coverflow' ), 'title' => __( 'Title', 'simple-coverflow' ) ); ?>
                     <?php foreach ( $orderby_options as $option => $option_name ) { ?>
-                        <option value="<?php echo $option; ?>" <?php selected( $option, simple_coverflow_get_setting( 'orderby' ) ); ?>><?php echo $option_name; ?></option>
+                        <option value="<?php echo $option; ?>" <?php selected( $option, $settings['orderby'] ); ?>><?php echo $option_name; ?></option>
                         <?php } ?>
                 </select>
             </td>
