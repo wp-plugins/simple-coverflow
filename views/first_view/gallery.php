@@ -371,7 +371,7 @@
                 }
                 /* Output the link. */
 
-                $img_src = wp_get_attachment_image_src( $id, 'full');
+                $img_src = wp_get_attachment_image_src( $id, 'large');
 
                 $output .= '<a href="' . $linkto .'" title="' . $title . '" ' . $attributes . '>';
                 if($r=true)$this->firstImg=$img_src['0']; //make link to first image
