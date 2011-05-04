@@ -26,6 +26,70 @@
 
             var $image;
             var $image_type;
+            var $cacheDir;
+            var $cacheDirUrl;
+
+            function dropShadow($style='kant') {
+
+
+                //style kan være kant, old eller normal
+                //$dst er destination
+                //$src er billedet
+
+                $image=$this->image;
+                //  list ($width, $height) = getImageSize($src); //the width and height of your image 
+
+                #Get image width / height
+                $width = ImageSX($image);
+                $height = ImageSY($image);
+
+
+                //Below I'm storing all 8 shadow images into memory.
+                $shadowStyle = dirname(__FILE__)."/shadow/" . $style;
+                $tl = imagecreatefromgif($shadowStyle . "/shadow_TL.gif");
+                $t = imagecreatefromgif($shadowStyle . "/shadow_T.gif");
+                $tr = imagecreatefromgif($shadowStyle . "/shadow_TR.gif");
+                $r = imagecreatefromgif($shadowStyle . "/shadow_R.gif");
+                $br = imagecreatefromgif($shadowStyle . "/shadow_BR.gif");
+                $b = imagecreatefromgif($shadowStyle . "/shadow_B.gif");
+                $bl = imagecreatefromgif($shadowStyle . "/shadow_BL.gif");
+                $l = imagecreatefromgif($shadowStyle . "/shadow_L.gif");
+
+
+                $w = imagesx($l); //Width of the left shadow image
+                $h = imagesy($l); //Height of the left shadow image
+
+                $canvasHeight = $height;// + (2 * $w);
+                $canvasWidth = $width;// + (2 * $w);
+
+                //create a blank canvas with these new dimensions
+                $canvas = imagecreatetruecolor($canvasWidth, $canvasHeight);
+
+                // Putting your images together
+                imagecopyresized($canvas, $t, 0, 0, 0, 0, $canvasWidth, $w, $h, $w);
+                imagecopyresized($canvas, $l, 0, 0, 0, 0, $w, $canvasHeight, $w, $h);
+                imagecopyresized($canvas, $b, 0, $canvasHeight - $w, 0, 0, $canvasWidth, $w, $h, $w);
+                imagecopyresized($canvas, $r, $canvasWidth - $w, 0, 0, 0, $w, $canvasHeight, $w, $h);
+
+
+                $w = imagesx($tl);
+                $h = imagesy($tl);
+                imagecopyresized($canvas, $tl, 0, 0, 0, 0, $w, $h, $w, $h);
+                imagecopyresized($canvas, $bl, 0, $canvasHeight - $h, 0, 0, $w, $h, $w, $h);
+                imagecopyresized($canvas, $br, $canvasWidth - $w, $canvasHeight - $h, 0, 0, $w, $h, $w, $h);
+                imagecopyresized($canvas, $tr, $canvasWidth - $w, 0, 0, 0, $w, $h, $w, $h);
+
+
+                $w = imagesx($l);
+                imagecopyresampled($canvas, $image, $w, $w, 0, 0, imagesx($image)-(2 * $w), imagesy($image)-(2 * $w), imagesx($image), imagesy($image));
+
+
+
+
+                $this->image=$canvas;
+
+
+            }
 
             function load($filename) {
                 $image_info = getimagesize($filename);
@@ -211,9 +275,40 @@
 
                 //$new_image = imagecreatetruecolor($width, $height);
                 // imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
-                $this->image = $canvas;   
+
+                $this->image = $canvas;  
+
+
             }      
 
+
+            function get($src,$width,$height,$shadowStyle=''){
+
+
+                $cacheDir=$this->cacheDir;
+                $caheUrlDir=$this->cacheDirUrl;
+                $filename=$cacheDir.$shadowStyle.$width.'x'.$height.basename($src);
+
+                if(file_exists($src) and is_file($src)){
+
+
+
+                    if(!file_exists($filename)){
+
+                        $this->load($src);
+                        $this->resize($width,$height);
+
+                        if($shadowStyle){
+                            $this->dropShadow($shadowStyle);
+                        }
+                        $this->save($filename);
+
+                    }
+
+                    return $caheUrlDir.$shadowStyle.$width.'x'.$height.basename($src);
+                }   
+
+            }
         }
 
     }

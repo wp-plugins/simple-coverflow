@@ -289,18 +289,18 @@
         function getThumbnail($filePath, $width="", $height="", $fileType="" ,$alt)
         {
 
-            
-            return $this->getImg($filePath,$width,$height ,$alt);
-          /*  
-            if ( empty($width) )
-                if ( empty($height) )
-                    if ( empty($fileType) )
-                        $fileType = "jpg";
 
-                    return WP_PLUGIN_URL . "/simple-coverflow/timthumb.php?src=" .
+            return $this->getImg($filePath,$width,$height ,$alt);
+            /*  
+            if ( empty($width) )
+            if ( empty($height) )
+            if ( empty($fileType) )
+            $fileType = "jpg";
+
+            return WP_PLUGIN_URL . "/simple-coverflow/timthumb.php?src=" .
             $filePath. "&amp;w=" . $width . "&amp;h=" . $height . "&amp;zc=1&amp;ft=" . $fileType;
-      
-        */
+
+            */
         }
 
 
@@ -523,29 +523,25 @@
 
 
 
-            $filename=SIMPLE_COVERLOW_CACHE.$width.'x'.$height.basename($src);
+            $dest=SIMPLE_COVERLOW_CACHE.$width.'x'.$height.basename($src);
             //$src=CMS_PACK_CACHE.basename($src);
 
+            
+            
+            // echo $settings = get_option( 'simple_coverflow_settings' );
+            
             if(strstr($src,'http://')){        
-                
+
 
                 $src=$this->convertUrlToServerPath($src);
             }
 
-            if(file_exists($src) and is_file($src)){
 
-
-                if(!file_exists($filename)){
-
-                    $image = new SimpleImage();
-                    $image->load($src);
-                    $image->resize($width,$height);
-                    $image->save($filename);
-
-                }
-
-                return '<img src="'.SIMPLE_COVERLOW_CACHE_URL.$width.'x'.$height.basename($src).'" alt="'.$alt.'" />';
-            }   
+            $shadow=$this->settings->get_setting('shadow');
+            $image = new SimpleImage();
+            $image->cacheDir=SIMPLE_COVERLOW_CACHE;
+            $image->cacheDirUrl=SIMPLE_COVERLOW_CACHE_URL;
+            return '<img src="'.$image->get($src,$width,$height,$shadow).'" alt="'.$alt.'" />';
 
 
         }

@@ -119,9 +119,12 @@
         $settings['cView'] = esc_html( $_POST['cView'] );
         $settings['border'] = esc_html( $_POST['border'] ); 
         $settings['frame'] = ( ( isset( $_POST['frame'] ) ) ? true : false );
-        $settings['frameColor'] = esc_html( $_POST['frameColor'] ); 
-
+        $settings['frameColor'] = esc_html( $_POST['frameColor'] );
+        $settings['shadow'] = esc_html( $_POST['shadow'] );
         
+         
+
+
         /* Update the theme settings. */
         $updated = update_option( 'simple_coverflow_settings', $settings );
     }
@@ -170,7 +173,7 @@
     * @since 0.8
     */
     function simple_coverflow_general_meta_box() {
-        
+
         $settings=get_option( 'simple_coverflow_settings' );
 
         foreach ( get_intermediate_image_sizes() as $size ){
@@ -203,7 +206,7 @@
             <th><?php _e( 'Frame around images:', 'simple-coverflow' ); ?></th>
             <td>
 
-            
+
                 <input id="frame" name="frame" type="checkbox" <?php checked( $settings['frame'], true ); ?> value="true" /> 
 
                 <label for="coveflow-width"><?php _e( 'Frame around images', 'simple-coverflow' ); ?></label>
@@ -213,8 +216,26 @@
 
             </td>
         </tr>
-        
-                <tr>
+
+        <tr>
+            <th><?php _e( 'Shadow style:', 'simple-coverflow' ); ?></th>
+            <td>
+                <?php _e( 'Select shadow style', 'simple_coverflow' ); ?>
+                <br />
+                <select id="cView" name="shadow">
+                    <option <?php selected( '', $settings['shadow'] ); ?> value="<?php echo ''; ?>"><?php echo 'none' ?></option>
+                    <option <?php selected( 'old', $settings['shadow']); ?> value="<?php echo 'old'; ?>"><?php echo 'old'; ?></option>
+
+
+                    <option <?php selected( 'kant', $settings['shadow']); ?> value="<?php echo 'kant'; ?>"><?php echo 'kant'; ?></option>
+                    <option <?php selected( 'normal', $settings['shadow']); ?> value="<?php echo 'normal'; ?>"><?php echo 'normal'; ?></option>
+
+                </select>
+            </td>
+        </tr>
+
+
+        <tr>
             <th><?php _e( 'Select view:', 'simple-coverflow' ); ?></th>
             <td>
                 <?php _e( 'Select default view or hide Arrows', 'simple_coverflow' ); ?>
@@ -226,11 +247,11 @@
                 </select>
             </td>
         </tr>
-        
+
         <tr>
-        
-        
-        
+
+
+
             <th><?php _e( 'Captions:', 'simple-coverflow' ); ?></th>
             <td>
                 <input id="caption_remove" name="caption_remove" type="checkbox" <?php checked( $settings['caption_remove'], true ); ?> value="true" /> 

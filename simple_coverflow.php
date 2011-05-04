@@ -41,6 +41,8 @@
 
     if( !is_dir( SIMPLE_COVERLOW_CACHE) ){
         @mkdir( SIMPLE_COVERLOW_CACHE );
+        chmod(SIMPLE_COVERLOW_CACHE,0777);
+
     }
 
 
