@@ -84,7 +84,11 @@ bugFixes
 
 = Version 1.5.2 =                               
 bugFixes
- 
+
+
+= Version 1.5.2 =                               
+New thumbnail generator
+  
  
 
 

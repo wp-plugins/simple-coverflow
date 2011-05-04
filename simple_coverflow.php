@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.5.2
+    * Version: 1.6
     * Author: Simon Hansen
     * Author URI: http://www.simonhans.dk
     *
@@ -27,10 +27,21 @@
     * 
     */
 
-
+    include('SimpleImage.php');
 
     define( 'SIMPLE_COVERFLOW_DIR', plugin_dir_path( __FILE__ ) );
     define( 'SIMPLE_COVERFLOW_URL', plugin_dir_url( __FILE__ ) );
+
+
+    $pos = strpos(WP_CONTENT_URL, $_SERVER['HTTP_HOST']) + strlen($_SERVER['HTTP_HOST']);
+
+    define("SIMPLE_COVERLOW_CACHE", WP_CONTENT_DIR . '/uploads/simple-coverflow-cache/'); // thumbnail url
+    define("SIMPLE_COVERLOW_CACHE_URL", substr(WP_CONTENT_URL, $pos)  . '/uploads/simple-coverflow-cache/'); // thumbnail url
+
+
+    if( !is_dir( SIMPLE_COVERLOW_CACHE) ){
+        @mkdir( SIMPLE_COVERLOW_CACHE );
+    }
 
 
 
@@ -187,7 +198,7 @@
     }
 
 
-    
+
 
 
 

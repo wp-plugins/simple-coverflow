@@ -286,9 +286,12 @@
         * @param $fileType The file type of the thumbnail; jpg, png, or gif (optional)
         * @return The URL of the thumbnail.
         */
-        function getThumbnail($filePath, $width="", $height="", $fileType="")
+        function getThumbnail($filePath, $width="", $height="", $fileType="" ,$alt)
         {
 
+            
+            return $this->getImg($filePath,$width,$height ,$alt);
+          /*  
             if ( empty($width) )
                 if ( empty($height) )
                     if ( empty($fileType) )
@@ -296,6 +299,8 @@
 
                     return WP_PLUGIN_URL . "/simple-coverflow/timthumb.php?src=" .
             $filePath. "&amp;w=" . $width . "&amp;h=" . $height . "&amp;zc=1&amp;ft=" . $fileType;
+      
+        */
         }
 
 
@@ -319,8 +324,8 @@
 
 
         function renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes){
-                     
-                   
+
+
             $padding=$this->getBorder();
 
             /* Loop through each attachment. */
@@ -376,9 +381,10 @@
                 $output .= '<a href="' . $linkto .'" title="' . $title . '" ' . $attributes . '>';
                 if($r=true)$this->firstImg=$img_src['0']; //make link to first image
                 $r=false;
-                $thumb= $this->getThumbnail($img_src['0'], $this->settings->get_setting('itemWidth'), $this->settings->get_setting('itemWidth'), 'jpg');
+                //echo $img_src['0'];
+                $thumb= $this->getThumbnail($img_src['0'], $this->settings->get_setting('itemWidth'), $this->settings->get_setting('itemWidth'), 'jpg',$title);
 
-                $output .= '<img src="' . $thumb . '" alt="' . $title . '" title="' . $title . '" />';
+                $output .= $thumb;
 
                 $output .= '</a>';
 
@@ -482,18 +488,91 @@
 
             $output.=$this->renderCoverflowItems($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes);
 
-            $output .= "\n\t\t\t</div></div>\n";
+            $output .= "\n\t\t\t</div>\n";
 
             $output.='<div style="padding:0px;height:40px;margin-top:0px;border:1px solid #999" >&nbsp 
             <div class="left" id="left_'.$unike_id.'"  ></div>
             <div class="right" id="right_'.$unike_id.'"  ></div> 
-            </div>';
+            </div></div>';
 
             /* Return out very nice, valid XHTML gallery. */
             return $output;
         }
 
+        function convertUrlToServerPath($src){
 
+            $srcRg= split('uploads',$src);
+            $uploads=  wp_upload_dir();
+            $src=$uploads['basedir'].$srcRg[1];
+            return $src;
+
+
+        }
+
+
+        /**
+        * specifie both width and height will cropscale. Only specifying one will scale
+        * 
+        * @param mixed $src
+        * @param mixed $width
+        * @param mixed $height
+        * @param mixed $alt
+        */
+
+        function getImg($src,$width,$height, $alt=""){
+
+
+
+            $filename=SIMPLE_COVERLOW_CACHE.$width.'x'.$height.basename($src);
+            //$src=CMS_PACK_CACHE.basename($src);
+
+            if(strstr($src,'http://')){        
+                
+
+                $src=$this->convertUrlToServerPath($src);
+            }
+
+            if(file_exists($src) and is_file($src)){
+
+
+                if(!file_exists($filename)){
+
+                    $image = new SimpleImage();
+                    $image->load($src);
+                    $image->resize($width,$height);
+                    $image->save($filename);
+
+                }
+
+                return '<img src="'.SIMPLE_COVERLOW_CACHE_URL.$width.'x'.$height.basename($src).'" alt="'.$alt.'" />';
+            }   
+
+
+        }
+
+
+        function getImgById($id,$width,$height, $alt=""){
+
+            $src=get_attached_file( $id,'full'); 
+            $filename=SIMPLE_COVERLOW_CACHE.$width.'x'.$height.basename($src);
+            //$src=CMS_PACK_CACHE.basename($src);
+            if(file_exists($src) and is_file($src)){
+
+
+                if(!file_exists($filename)){
+
+                    $image = new SimpleImage();
+                    $image->load($src);
+                    $image->resize($width,$height);
+                    $image->save($filename);
+
+                }
+
+                return '<img src="'.SIMPLE_COVERLOW_CACHE_URL.$width.'x'.$height.basename($src).'" alt="'.$alt.'" />';
+            }   
+
+
+        }
 
     }
 ?>
