@@ -1,31 +1,14 @@
 <?php
-    /**
-    * Plugin Name: Simple coverflow
-    * Version: 1.6.0
-    * Author: Simon Hansen
-    * Author URI: http://www.simonhans.dk
-    *
-    * 
-    *
-    * Developers can learn more about the WordPress shortcode API:
-    * @link http://codex.wordpress.org/Shortcode_API
-    *
-    * This plugin has been tested and integrates with these scripts:
-    * @link http://jquery.com/demo/thickbox
-    *
-    * @copyright 2010- 2010
-    * @version 1.0.0
-    * @author Simon Hansen
-    * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-    *
-    * This program is distributed in the hope that it will be useful,
-    * but WITHOUT ANY WARRANTY; without even the implied warranty of
-    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    *
-    * @package simple-coverflow
-    * 
-    * 
+    /*
+    Plugin Name: Simple coverflow
+    Plugin URI: 
+    Description: 
+    Version: 1.6.0
+    Author: Simon Hansen
+    Author URI: http://simonhans.dk/
     */
+
+
 
     include('SimpleImage.php');
 
