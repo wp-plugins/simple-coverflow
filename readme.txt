@@ -89,6 +89,11 @@ bugFixes
 = Version 1.6 =                               
 New thumbnail generator
 Added option to drop shadow in admin panel
+
+= Version 1.6.1 =                               
+css fix
+
+
   
  
 

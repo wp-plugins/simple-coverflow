@@ -482,7 +482,7 @@
         */
         function render($attachments,$unike_id,$itemtag,$icontag,$id,$title,$size,$link,$attributes){
 
-            $output = "\t\t\t<div id='simple_coverflow-{$unike_id}' class=' length simple_coverflow  simple_coverflow-{$id}'>";
+            $output = "\t\t\t<div id='frame-1'> <img style='width:".$this->settings->get_setting('coverflow_width' )."px' src='' /></div><div id='simple_coverflow-{$unike_id}' class=' length simple_coverflow  simple_coverflow-{$id}'>";
 
             $output .= "\n\t\t\t\t<div  class='simscoverflow simple_coverflow-row   clear'>";
 
