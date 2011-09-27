@@ -117,12 +117,13 @@
         $settings['thickbox_css'] = ( ( isset( $_POST['thickbox_css'] ) ) ? true : false );
         $settings['coverflow_width'] = esc_html( $_POST['coverflow_width'] ); 
         $settings['cView'] = esc_html( $_POST['cView'] );
-        $settings['border'] = esc_html( $_POST['border'] ); 
+        if( !is_int($_POST['border'])){$border=0;}
+        $settings['border'] = esc_html( $border); 
         $settings['frame'] = ( ( isset( $_POST['frame'] ) ) ? true : false );
         $settings['frameColor'] = esc_html( $_POST['frameColor'] );
         $settings['shadow'] = esc_html( $_POST['shadow'] );
-        
-         
+
+
 
 
         /* Update the theme settings. */
