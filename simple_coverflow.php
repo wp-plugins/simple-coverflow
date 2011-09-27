@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.6.1.1
+    * Version: 1.6.2
     * Author: Simon Hansen
     * Author URI: http://www.simonhans.dk
     *

@@ -93,6 +93,10 @@ Added option to drop shadow in admin panel
 = Version 1.6.1 =                               
 css fix
 
+= Version 1.6.2 =                              
+completely removed timthumb thumbnail genarator. 
+
+
 
   
  
@@ -100,6 +104,8 @@ css fix
 
  
 ==Upgrade Notice ==
+Please upgrade to version 1.6.2 or above. The former versions were using an older version of timthumb, that have security isues.
+
 To upgrade from a previous version of this plugin, delete the entire folder and files from the previous version of the plugin and then follow the installation instructions below.
 
  
