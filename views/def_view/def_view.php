@@ -23,7 +23,7 @@
         static public function include_css_and_js_scripts(){
             //wp_enqueue_script('jquery');
             //wp_enqueue_script('some_js', WP_CONTENT_URL . '/plugins/simple-coverflow/views/def_view/some_js.js', array('jquery')); 
-            //wp_enqueue_style('simple_coverflow_defView_style', WP_CONTENT_URL . '/plugins/simple-coverflow/style.css');
+            wp_enqueue_style('simple_coverflow_defView_style', WP_CONTENT_URL . '/plugins/simple-coverflow/views/def_view/style.css');
 
         }
 
@@ -34,7 +34,8 @@
         */
         static public function javascript_and_css(){   
 
-            echo '<style type="text/css">  
+            echo '<style type="text/css"> 
+            
 
             </style>
             ';
@@ -51,23 +52,28 @@
 
         public function render() {
 
+           $imageRender=new simple_coverflow();
+            
+            $output='<div style="width:700px">';
             foreach ($this->attachments as $id => $attachment ) {
-                $img = wp_get_attachment_image_src( $id, 'medium');
+                $img = wp_get_attachment_image_src( $id, 'large');
 
                 /* Output the link. */
-                $output .= '<div style="border:4px solid black; float:left"><a  href="' .  $img['0'].'" title="' . $title . '"' . $attributes . '>';
+                $output .= '<div class="sc_def_view" style="border:0px solid black; float:left"><a rel="clean-gallery-" class="thickbox"   href="' .  $img['0'].'" title="' . $title . '"' . $attributes . '>';
 
 
 
-                $thumb= simple_coverflow::getThumbnail($img['0'], 110, 148, 'jpg');
+                $thumb= $imageRender->getThumbnail($img['0'], 120, 120, 'jpg','hej');
 
-                $output .= '<img src="' . $thumb . '" alt="' . $title . '" style="float:left" title="' . $title . '" />';
+                $output .= $thumb;
 
 
                 $output .= '</a></div>';
 
             }
 
+            
+            $output.='</div >';
             return $output;
         }
 

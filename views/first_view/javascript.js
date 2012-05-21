@@ -32,7 +32,7 @@ simple_coverflow={
 
 
 
-        jQuery("#left_"+i).click(function(){  
+        jQuery("#left_"+i).click(function(){          
 
 
             findWidth=Array();
@@ -45,8 +45,9 @@ simple_coverflow={
 
             w=parseInt(findWidth['0'])-simple_cover_content_width;
 
-            if(w > width_of_all_img){    
-
+            if(w > width_of_all_img){  
+              
+            
                 jQuery(div_id).animate({"left": "-="+(parseInt(simple_cover_content_width)+parseInt(simple_cover_border))+"px"}, "slow");
 
             }
@@ -60,6 +61,7 @@ simple_coverflow={
 
 jQuery(document).ready(function(){
     numOfCoverflows=jQuery('#content').find('.simple_coverflow').length;
+
     
     /**
     * 

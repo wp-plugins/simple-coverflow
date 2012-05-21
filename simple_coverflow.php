@@ -1,7 +1,7 @@
 <?php
     /**
     * Plugin Name: Simple coverflow
-    * Version: 1.6.2
+    * Version: 1.7
     * Author: Simon Hansen
     * Author URI: http://www.simonhans.dk
     *
@@ -52,7 +52,7 @@
         // include view
         require_once( dirname (__FILE__) . '/views/first_view/gallery.php' );
 
-        //include_once(dirname(__FILE__)."/views/def_view/def_view.php");
+        include_once(dirname(__FILE__)."/views/def_view/def_view.php");
 
     }else // only for backend
     {
@@ -108,7 +108,7 @@
         */
 
         function shortcode_handler($attr){
-
+               
             if($attr['view']=="def" and class_exists('defView')){
                 $attachments=$this->data();
                 $r=new defView($attachments);

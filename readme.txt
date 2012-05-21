@@ -96,6 +96,8 @@ css fix
 = Version 1.6.2 =                              
 completely removed timthumb thumbnail genarator. 
 
+= Version 1.7 =                              
+added a new theme, can be used with [coverflow view="def"]
 
 
   
